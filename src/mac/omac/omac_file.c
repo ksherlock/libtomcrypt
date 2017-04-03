@@ -39,41 +39,42 @@ int omac_file(int cipher,
    int err;
    omac_state omac;
    FILE *in;
-   unsigned char buf[512];
+   unsigned char *buf;
 
    LTC_ARGCHK(key      != NULL);
    LTC_ARGCHK(filename != NULL);
    LTC_ARGCHK(out      != NULL);
    LTC_ARGCHK(outlen   != NULL);
 
+   if ((buf = XMALLOC(LTC_FILE_READ_BUFSIZE)) == NULL) {
+      return CRYPT_MEM;
+   }
+
    in = fopen(filename, "rb");
    if (in == NULL) {
-      return CRYPT_FILE_NOTFOUND;
+      err = CRYPT_FILE_NOTFOUND;
+      goto LBL_ERR;
    }
 
    if ((err = omac_init(&omac, cipher, key, keylen)) != CRYPT_OK) {
       fclose(in);
-      return err;
+      goto LBL_ERR;
    }
 
    do {
-      x = fread(buf, 1, sizeof(buf), in);
+      x = fread(buf, 1, LTC_FILE_READ_BUFSIZE, in);
       if ((err = omac_process(&omac, buf, (unsigned long)x)) != CRYPT_OK) {
          fclose(in);
-         return err;
+         goto LBL_ERR;
       }
-   } while (x == sizeof(buf));
+   } while (x == LTC_FILE_READ_BUFSIZE);
    fclose(in);
 
-   if ((err = omac_done(&omac, out, outlen)) != CRYPT_OK) {
-      return err;
-   }
+   err = omac_done(&omac, out, outlen);
 
-#ifdef LTC_CLEAN_STACK
-   zeromem(buf, sizeof(buf));
-#endif
-
-   return CRYPT_OK;
+LBL_ERR:
+   XFREE(buf);
+   return err;
 #endif
 }
 
