@@ -91,6 +91,7 @@ int sober128_prng_ready(prng_state *prng)
    int err;
 
    LTC_ARGCHK(prng != NULL);
+   if (prng->sober128.ready) return CRYPT_OK;
 
    /* key 32 bytes, 20 rounds */
    if ((err = sober128_setup(&prng->sober128.s, prng->sober128.ent, 32)) != CRYPT_OK)           return err;
@@ -112,6 +113,7 @@ int sober128_prng_ready(prng_state *prng)
 unsigned long sober128_prng_read(unsigned char *out, unsigned long outlen, prng_state *prng)
 {
    LTC_ARGCHK(prng != NULL);
+   if (!prng->sober128.ready) return 0;
    if (sober128_keystream(&prng->sober128.s, out, outlen) != CRYPT_OK) return 0;
    return outlen;
 }
@@ -123,8 +125,12 @@ unsigned long sober128_prng_read(unsigned char *out, unsigned long outlen, prng_
 */
 int sober128_prng_done(prng_state *prng)
 {
+   int err;
+
    LTC_ARGCHK(prng != NULL);
-   return sober128_done(&prng->sober128.s);
+   if ((err = sober128_done(&prng->sober128.s)) != CRYPT_OK) return err;
+   prng->sober128.ready = 0;
+   return CRYPT_OK;
 }
 
 /**

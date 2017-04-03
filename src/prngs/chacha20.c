@@ -89,6 +89,7 @@ int chacha20_prng_ready(prng_state *prng)
    int err;
 
    LTC_ARGCHK(prng != NULL);
+   if (prng->chacha.ready) return CRYPT_OK;
 
    /* key 32 bytes, 20 rounds */
    if ((err = chacha_setup(&prng->chacha.s, prng->chacha.ent, 32, 20)) != CRYPT_OK)      return err;
@@ -110,6 +111,7 @@ int chacha20_prng_ready(prng_state *prng)
 unsigned long chacha20_prng_read(unsigned char *out, unsigned long outlen, prng_state *prng)
 {
    LTC_ARGCHK(prng != NULL);
+   if (!prng->chacha.ready) return 0;
    if (chacha_keystream(&prng->chacha.s, out, outlen) != CRYPT_OK) return 0;
    return outlen;
 }
@@ -121,8 +123,12 @@ unsigned long chacha20_prng_read(unsigned char *out, unsigned long outlen, prng_
 */
 int chacha20_prng_done(prng_state *prng)
 {
+   int err;
+
    LTC_ARGCHK(prng != NULL);
-   return chacha_done(&prng->chacha.s);
+   if ((err = chacha_done(&prng->chacha.s)) != CRYPT_OK) return err;
+   prng->chacha.ready = 0;
+   return CRYPT_OK;
 }
 
 /**
