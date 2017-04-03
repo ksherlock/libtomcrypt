@@ -124,8 +124,15 @@ const char *crypt_build_settings =
 #if defined(LTC_CAMELLIA)
    "   Camellia\n"
 #endif
+   "Stream ciphers built-in:\n"
 #if defined(LTC_CHACHA)
    "   ChaCha\n"
+#endif
+#if defined(LTC_RC4)
+   "   RC4\n"
+#endif
+#if defined(LTC_SOBER128)
+   "   SOBER128\n"
 #endif
 
     "\nHashes built-in:\n"
@@ -271,7 +278,7 @@ const char *crypt_build_settings =
 #if defined(LTC_SPRNG)
     "   SPRNG\n"
 #endif
-#if defined(LTC_RC4)
+#if defined(LTC_RC4_PRNG)
     "   RC4\n"
 #endif
 #if defined(LTC_CHACHA20_PRNG)
@@ -280,7 +287,7 @@ const char *crypt_build_settings =
 #if defined(LTC_FORTUNA)
     "   Fortuna (" NAME_VALUE(LTC_FORTUNA_POOLS) ", " NAME_VALUE(LTC_FORTUNA_WD) ")\n"
 #endif
-#if defined(LTC_SOBER128)
+#if defined(LTC_SOBER128_PRNG)
     "   SOBER128\n"
 #endif
 

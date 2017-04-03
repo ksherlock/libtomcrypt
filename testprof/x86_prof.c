@@ -328,13 +328,13 @@ static void _unregister_all(void)
   unregister_prng(&fortuna_desc);
 #endif
 #ifdef LTC_RC4
-  unregister_prng(&rc4_desc);
+  unregister_prng(&rc4_prng_desc);
 #endif
 #ifdef LTC_CHACHA
   unregister_prng(&chacha20_prng_desc);
 #endif
 #ifdef LTC_SOBER128
-  unregister_prng(&sober128_desc);
+  unregister_prng(&sober128_prng_desc);
 #endif
 } /* _cleanup() */
 
@@ -498,13 +498,13 @@ register_prng(&yarrow_desc);
 register_prng(&fortuna_desc);
 #endif
 #ifdef LTC_RC4
-register_prng(&rc4_desc);
+register_prng(&rc4_prng_desc);
 #endif
 #ifdef LTC_CHACHA
 register_prng(&chacha20_prng_desc);
 #endif
 #ifdef LTC_SOBER128
-register_prng(&sober128_desc);
+register_prng(&sober128_prng_desc);
 #endif
 
 #ifdef LTC_PRNG_ENABLE_LTC_RNG
