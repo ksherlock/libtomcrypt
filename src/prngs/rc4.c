@@ -39,7 +39,7 @@ const struct ltc_prng_descriptor rc4_prng_desc =
 int rc4_prng_start(prng_state *prng)
 {
    LTC_ARGCHK(prng != NULL);
-   prng->chacha.ready = 0;
+   prng->rc4.ready = 0;
 
    /* set entropy (key) size to zero */
    prng->rc4.s.x = 0;
