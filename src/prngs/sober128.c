@@ -203,21 +203,21 @@ int sober128_prng_test(void)
    sober128_prng_add_entropy(en, sizeof(en), &st); /* add entropy to uninitialized prng */
    sober128_prng_ready(&st);
    sober128_prng_read(out, 10, &st);  /* 10 bytes for testing */
-   if (compare_testvector(out, 10, t1, sizeof(t1), "SOBER128-PRNG", 1) != 0) return CRYPT_FAIL_TESTVECTOR;
+   if (compare_testvector(out, 10, t1, sizeof(t1), "SOBER128-PRNG", 1)) return CRYPT_FAIL_TESTVECTOR;
    sober128_prng_read(out, 500, &st);
    sober128_prng_add_entropy(en, sizeof(en), &st); /* add entropy to already initialized prng */
    sober128_prng_read(out, 500, &st);
    sober128_prng_export(dmp, &dmplen, &st);
    sober128_prng_read(out, 500, &st); /* skip 500 bytes */
    sober128_prng_read(out, 10, &st);  /* 10 bytes for testing */
-   if (compare_testvector(out, 10, t2, sizeof(t2), "SOBER128-PRNG", 2) != 0) return CRYPT_FAIL_TESTVECTOR;
+   if (compare_testvector(out, 10, t2, sizeof(t2), "SOBER128-PRNG", 2)) return CRYPT_FAIL_TESTVECTOR;
    sober128_prng_done(&st);
 
    XMEMSET(&st, 0xFF, sizeof(st)); /* just to be sure */
    sober128_prng_import(dmp, dmplen, &st);
    sober128_prng_read(out, 500, &st); /* skip 500 bytes */
    sober128_prng_read(out, 10, &st);  /* 10 bytes for testing */
-   if (compare_testvector(out, 10, t2, sizeof(t2), "SOBER128-PRNG", 3) != 0) return CRYPT_FAIL_TESTVECTOR;
+   if (compare_testvector(out, 10, t2, sizeof(t2), "SOBER128-PRNG", 3)) return CRYPT_FAIL_TESTVECTOR;
    sober128_prng_done(&st);
 
    return CRYPT_OK;
