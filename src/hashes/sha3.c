@@ -251,6 +251,9 @@ int sha3_done(hash_state *md, unsigned char *hash)
 #endif
 
    XMEMCPY(hash, md->sha3.sb, md->sha3.capacity_words * 4);
+#ifdef LTC_CLEAN_STACK
+    zeromem(md, sizeof(hash_state));
+#endif
    return CRYPT_OK;
 }
 
